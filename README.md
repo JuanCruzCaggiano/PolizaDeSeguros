@@ -6,3 +6,8 @@ spring.datasource.url=jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_
 
 Para correr los test debemos comentar la linea anterior y descomentar esta linea
 spring.datasource.url=jdbc:mysql://localhost:3306/polizadeseguros?useSSL=false&allowPublicKeyRetrieval=true
+
+Tambien cambiar las lineas de usuario y contraseña
+
+spring.datasource.username=tuUsuario
+spring.datasource.password=tuPassword
