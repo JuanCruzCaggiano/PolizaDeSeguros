@@ -37,7 +37,7 @@ public class PolizaController {
         emailService.sendEmail(
                 clienteDePoliza.getEmail(),
                 "Nueva Póliza Creada",
-                "Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaCreada.getId()
+                "Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaCreada.getCodigo()
         );
         return new ResponseEntity<>(polizaCreada, HttpStatus.CREATED);
     }
@@ -64,7 +64,7 @@ public class PolizaController {
         emailService.sendEmail(
                 clienteDePoliza.getEmail(),
                 "Póliza actualizada correctamente",
-                "Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getId()
+                "Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getCodigo()
         );
 
         return ResponseEntity.ok(polizaActualizada);

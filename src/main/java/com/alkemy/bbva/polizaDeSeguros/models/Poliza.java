@@ -21,6 +21,8 @@ public class Poliza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPoliza;
 
+    private Long codigo;
+
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;

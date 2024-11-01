@@ -12,6 +12,9 @@ import com.alkemy.bbva.polizaDeSeguros.repositories.TipoSeguroRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,9 +39,9 @@ public class PolizaService {
 
     private static final Logger logger = LoggerFactory.getLogger(PolizaService.class);
 
+    @CacheEvict(value = "polizas", allEntries = true)
     public PolizaDTO crearPoliza(PolizaDTO polizaDTO) {
         logger.info("Creando nueva póliza...");
-
         Cliente cliente = clienteRepository.findById(polizaDTO.getIdCliente())
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
 
@@ -46,6 +49,7 @@ public class PolizaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tipo de Seguro no encontrado"));
 
         Poliza poliza = new Poliza();
+        poliza.setCodigo(polizaDTO.getCodigo());
         poliza.setDescripcion(polizaDTO.getDescripcion());
         poliza.setMontoAsegurado(polizaDTO.getMontoAsegurado());
         poliza.setFechaEmision(polizaDTO.getFechaEmision());
@@ -58,19 +62,27 @@ public class PolizaService {
         return new PolizaDTO().mapFromPoliza(poliza);
     }
 
+    @Cacheable(value = "polizas", unless = "#result.isEmpty()")
     public List<PolizaDTO> obtenerPolizas() {
+        logger.info("Buscando pólizas...");
         List<Poliza> list = polizaRepository.findAll();
         return list.stream().map(poliza ->
                 new PolizaDTO().mapFromPoliza(poliza)).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "poliza", key = "#id", unless = "#result == null")
     public Optional<PolizaDTO> buscarPolizaPorId(Long id) {
+        logger.info("Buscando póliza...");
         return polizaRepository.findById(id).map(poliza -> new PolizaDTO().mapFromPoliza(poliza));
     }
 
+    @CachePut(value = "poliza", key = "#id")
+    @CacheEvict(value = "polizas", allEntries = true)
     public PolizaDTO actualizarPoliza(Long id, PolizaDTO polizaActualizada) {
+        logger.info("Actualizando póliza...");
         return polizaRepository.findById(id)
                 .map(poliza -> {
+                    poliza.setCodigo(polizaActualizada.getCodigo());
                     poliza.setMontoAsegurado(polizaActualizada.getMontoAsegurado());
                     poliza.setFechaVencimiento(polizaActualizada.getFechaVencimiento());
                     poliza.setEstado(polizaActualizada.getEstado());
@@ -79,7 +91,7 @@ public class PolizaService {
 
                     // Convertir Poliza a PolizaDTO
                     PolizaDTO polizaDTO = new PolizaDTO();
-                    polizaDTO.setId(polizaGuardada.getIdPoliza());
+                    polizaDTO.setCodigo(polizaGuardada.getCodigo());
                     polizaDTO.setMontoAsegurado(polizaGuardada.getMontoAsegurado());
                     polizaDTO.setFechaEmision(polizaGuardada.getFechaEmision());
                     polizaDTO.setFechaVencimiento(polizaGuardada.getFechaVencimiento());
@@ -88,11 +100,14 @@ public class PolizaService {
                     polizaDTO.setIdCliente(polizaGuardada.getCliente().getIdCliente());
                     polizaDTO.setIdTipoSeguro(polizaGuardada.getTipoSeguro().getIdTipoSeguro());
 
+                    logger.info("Póliza actualizada con éxito");
                     return polizaDTO;
                 }).orElseThrow(() -> new ResourceNotFoundException("Póliza no encontrada"));
     }
 
+    @CacheEvict(value = "polizas", allEntries = true)
     public void eliminarPoliza(Long id) {
+        logger.info("Eliminando póliza...");
         Poliza poliza = polizaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Póliza no encontrada"));
 
@@ -103,15 +118,21 @@ public class PolizaService {
         );
 
         polizaRepository.delete(poliza);
+        logger.info("Póliza eliminada con éxito");
     }
 
+    @Cacheable(value = "polizas", unless = "#result.isEmpty()")
     public List<PolizaDTO> buscarPorEstado(final EstadoPoliza estado) {
+        logger.info("Buscando póliza...");
         List<Poliza> list = polizaRepository.findByEstado(estado);
         return list.stream().map(poliza ->
                 new PolizaDTO().mapFromPoliza(poliza)).collect(Collectors.toList());
     }
 
+    @CachePut(value = "poliza", key = "#id")
+    @CacheEvict(value = "polizas", allEntries = true)
     public boolean actualizarEstadoSiVencido(Long id) {
+        logger.info("Actualizando póliza...");
         Poliza poliza = polizaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Póliza no encontrada"));
 
@@ -127,12 +148,14 @@ public class PolizaService {
                     "Estimado cliente, su póliza ha vencido y se encuentra actualizada. Con id " + id
             );
 
+            logger.info("Póliza actualizada con éxito");
             return true;
         }
         return false;
     }
 
     public List<PolizaDTO> polizaMontoMayorQue(final double monto) {
+        logger.info("Buscando póliza...");
         List<Poliza> list = polizaRepository.findByMontoGreaterThan(monto);
         return list.stream().map(poliza ->
                 new PolizaDTO().mapFromPoliza(poliza)).collect(Collectors.toList());

@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class PolizaDTO {
-    private Long id;
+    private Long codigo;
     private String descripcion;
     private double montoAsegurado;
     private Date fechaEmision;
@@ -32,7 +32,7 @@ public class PolizaDTO {
 
     public PolizaDTO mapFromPoliza(final Poliza poliza) {
         return PolizaDTO.builder()
-                .id(poliza.getIdPoliza())
+                .codigo(poliza.getCodigo())
                 .descripcion(poliza.getDescripcion())
                 .montoAsegurado(poliza.getMontoAsegurado())
                 .fechaEmision(poliza.getFechaEmision())

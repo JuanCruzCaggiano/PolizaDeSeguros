@@ -63,7 +63,7 @@ class PolizaControllerTest {
         tipoSeguroDTO.setPrimaBase(500.0);
 
         polizaDTO = new PolizaDTO();
-        polizaDTO.setId(1L);
+        polizaDTO.setCodigo(100L);
         polizaDTO.setDescripcion("Poliza de prueba");
         polizaDTO.setMontoAsegurado(200000.0);
         polizaDTO.setFechaEmision(new Date());
@@ -90,7 +90,7 @@ class PolizaControllerTest {
         verify(emailService, times(1)).sendEmail(
                 eq(clienteSimulado.getEmail()),
                 eq("Nueva Póliza Creada"),
-                eq("Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaDTO.getId())
+                eq("Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaDTO.getCodigo())
         );
     }
 
@@ -132,7 +132,7 @@ class PolizaControllerTest {
 
 
         PolizaDTO polizaActualizada = new PolizaDTO();
-        polizaActualizada.setId(1L);
+        polizaActualizada.setCodigo(200L);
         polizaActualizada.setDescripcion("Poliza Actualizada");
         polizaActualizada.setMontoAsegurado(250000.0);
         polizaActualizada.setEstado(EstadoPoliza.VIGENTE);
@@ -153,7 +153,7 @@ class PolizaControllerTest {
         verify(emailService, times(1)).sendEmail(
                 eq(clienteDTO.getEmail()),
                 eq("Póliza actualizada correctamente"),
-                eq("Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getId())
+                eq("Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getCodigo())
         );
     }
 
@@ -169,7 +169,7 @@ class PolizaControllerTest {
     @Test
     void buscarVigentes_deberiaRetornarListaDePolizasVigentes() {
         PolizaDTO polizaVigente = new PolizaDTO();
-        polizaVigente.setId(1L);
+        polizaVigente.setCodigo(300L);
         polizaVigente.setDescripcion("Poliza Vigente");
         polizaVigente.setEstado(EstadoPoliza.VIGENTE);
 
