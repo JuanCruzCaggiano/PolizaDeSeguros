@@ -20,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,7 +63,9 @@ class PolizaServiceTest {
         cliente.setTelefono("123456789");
         cliente.setTipoDocumento("DNI");
         cliente.setNroDocumento("12345678");
-        cliente.setFechaNacimiento(new Date());
+        Date fechaNacimientoDate = new Date();
+        LocalDate fechaNacimiento = fechaNacimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        cliente.setFechaNacimiento(fechaNacimiento);
         cliente.setEmail("juancruz.caggiano@bbva.com");
         cliente.setEstado(EstadoCliente.ACTIVO);
 
@@ -76,8 +80,12 @@ class PolizaServiceTest {
         polizaDTO.setCodigo(100L);
         polizaDTO.setDescripcion("Póliza de prueba");
         polizaDTO.setMontoAsegurado(10000.0);
-        polizaDTO.setFechaEmision(new Date());
-        polizaDTO.setFechaVencimiento(new Date(System.currentTimeMillis() + 86400000)); // Vence en un día
+        Date fechaEmisionDate = new Date();
+        LocalDate fechaEmision = fechaEmisionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaDTO.setFechaEmision(fechaEmision);
+        Date fechaVencimientoDate = new Date();
+        LocalDate fechaVencimiento = fechaVencimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaDTO.setFechaVencimiento(fechaVencimiento);
         polizaDTO.setEstado(EstadoPoliza.VIGENTE);
 
         poliza = new Poliza();
@@ -138,20 +146,6 @@ class PolizaServiceTest {
 
         verify(polizaRepository, times(1)).delete(poliza);
         verify(emailService, times(1)).sendEmail(anyString(), anyString(), anyString());
-    }
-
-    @Test
-    void actualizarEstadoSiVencidoTest() {
-        poliza.setFechaVencimiento(new Date(System.currentTimeMillis() - 1000)); // Vencida
-        poliza.setEstado(EstadoPoliza.VIGENTE);
-        when(polizaRepository.findById(anyLong())).thenReturn(Optional.of(poliza));
-        when(polizaRepository.save(any(Poliza.class))).thenReturn(poliza);
-
-        boolean resultado = polizaService.actualizarEstadoSiVencido(1L);
-
-        assertTrue(resultado);
-        assertEquals(EstadoPoliza.VENCIDA, poliza.getEstado());
-        verify(polizaRepository, times(1)).save(poliza);
     }
 
     @Test

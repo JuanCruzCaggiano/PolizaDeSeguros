@@ -17,6 +17,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -53,7 +55,9 @@ class PolizaControllerTest {
         clienteDTO.setTelefono("123456789");
         clienteDTO.setTipoDocumento("DNI");
         clienteDTO.setNroDocumento("12345678");
-        clienteDTO.setFechaNacimiento(new Date());
+        Date fechaNacimientoDate = new Date();
+        LocalDate fechaNacimiento = fechaNacimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        clienteDTO.setFechaNacimiento(fechaNacimiento);
         clienteDTO.setEmail("juancruz.caggiano@bbva.com");
         clienteDTO.setEstado(EstadoCliente.ACTIVO);
 
@@ -66,8 +70,12 @@ class PolizaControllerTest {
         polizaDTO.setCodigo(100L);
         polizaDTO.setDescripcion("Poliza de prueba");
         polizaDTO.setMontoAsegurado(200000.0);
-        polizaDTO.setFechaEmision(new Date());
-        polizaDTO.setFechaVencimiento(new Date());
+        Date fechaEmisionDate = new Date();
+        LocalDate fechaEmision = fechaEmisionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaDTO.setFechaEmision(fechaEmision);
+        Date fechaVencimientoDate = new Date();
+        LocalDate fechaVencimiento = fechaVencimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaDTO.setFechaVencimiento(fechaVencimiento);
         polizaDTO.setEstado(EstadoPoliza.VIGENTE);
         polizaDTO.setIdCliente(clienteDTO.getId());
         polizaDTO.setIdTipoSeguro(tipoSeguroDTO.getId());
@@ -90,7 +98,7 @@ class PolizaControllerTest {
         verify(emailService, times(1)).sendEmail(
                 eq(clienteSimulado.getEmail()),
                 eq("Nueva Póliza Creada"),
-                eq("Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaDTO.getCodigo())
+                eq("Estimado cliente, su póliza ha sido creada exitosamente. Con código " + polizaDTO.getCodigo())
         );
     }
 
@@ -121,7 +129,9 @@ class PolizaControllerTest {
         clienteDTO.setTelefono("123456789");
         clienteDTO.setTipoDocumento("DNI");
         clienteDTO.setNroDocumento("12345678");
-        clienteDTO.setFechaNacimiento(new Date());
+        Date fechaNacimientoDate = new Date();
+        LocalDate fechaNacimiento = fechaNacimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        clienteDTO.setFechaNacimiento(fechaNacimiento);
         clienteDTO.setEmail("juancruz.caggiano@bbva.com");
         clienteDTO.setEstado(EstadoCliente.ACTIVO);
 
@@ -136,8 +146,12 @@ class PolizaControllerTest {
         polizaActualizada.setDescripcion("Poliza Actualizada");
         polizaActualizada.setMontoAsegurado(250000.0);
         polizaActualizada.setEstado(EstadoPoliza.VIGENTE);
-        polizaActualizada.setFechaEmision(new Date());
-        polizaActualizada.setFechaVencimiento(new Date());
+        Date fechaEmisionDate = new Date();
+        LocalDate fechaEmision = fechaEmisionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaActualizada.setFechaEmision(fechaEmision);
+        Date fechaVencimientoDate = new Date();
+        LocalDate fechaVencimiento = fechaVencimientoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        polizaActualizada.setFechaVencimiento(fechaVencimiento);
         polizaActualizada.setIdCliente(clienteDTO.getId());
         polizaActualizada.setIdTipoSeguro(tipoSeguroDTO.getId());
 
@@ -153,7 +167,7 @@ class PolizaControllerTest {
         verify(emailService, times(1)).sendEmail(
                 eq(clienteDTO.getEmail()),
                 eq("Póliza actualizada correctamente"),
-                eq("Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getCodigo())
+                eq("Estimado cliente, su póliza ha sido actualizada exitosamente. Con código " + polizaActualizada.getCodigo())
         );
     }
 

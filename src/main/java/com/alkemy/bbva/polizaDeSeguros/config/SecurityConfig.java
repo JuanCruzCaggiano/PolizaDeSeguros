@@ -103,5 +103,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", cc);
         return source;
     }
-
 }
