@@ -17,6 +17,12 @@ public class Usuario {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "apellido")
+    private String apellido;
+
     @Column(name = "username")
     private String username;
 
@@ -29,7 +35,9 @@ public class Usuario {
     @Column(name = "roles")
     private String roles;
 
-    public Usuario(String username, String password, Boolean activo, String roles) {
+    public Usuario(String nombre, String apellido, String username, String password, Boolean activo, String roles) {
+        this.nombre = nombre;
+        this.apellido = apellido;
         this.username = username;
         this.password = password;
         this.activo = activo;

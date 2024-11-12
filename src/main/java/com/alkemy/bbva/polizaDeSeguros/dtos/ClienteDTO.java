@@ -4,7 +4,7 @@ import com.alkemy.bbva.polizaDeSeguros.enums.EstadoCliente;
 import com.alkemy.bbva.polizaDeSeguros.models.Cliente;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Builder
 @Data
@@ -18,7 +18,7 @@ public class ClienteDTO {
     private String telefono;
     private String tipoDocumento;
     private String nroDocumento;
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
     private String email;
     private EstadoCliente estado;
 
@@ -37,4 +37,19 @@ public class ClienteDTO {
                 .build();
     }
 
+    // Método toEntity() para convertir el DTO a la entidad Cliente
+    public Cliente toEntity() {
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(this.id);
+        cliente.setNombre(this.nombre);
+        cliente.setApellido(this.apellido);
+        cliente.setDireccion(this.direccion);
+        cliente.setTelefono(this.telefono);
+        cliente.setTipoDocumento(this.tipoDocumento);
+        cliente.setNroDocumento(this.nroDocumento);
+        cliente.setFechaNacimiento(this.fechaNacimiento);
+        cliente.setEmail(this.email);
+        cliente.setEstado(this.estado);
+        return cliente;
+    }
 }

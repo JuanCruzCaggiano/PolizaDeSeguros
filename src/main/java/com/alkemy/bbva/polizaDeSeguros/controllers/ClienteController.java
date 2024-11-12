@@ -1,7 +1,6 @@
 package com.alkemy.bbva.polizaDeSeguros.controllers;
 
 import com.alkemy.bbva.polizaDeSeguros.dtos.ClienteDTO;
-import com.alkemy.bbva.polizaDeSeguros.models.Cliente;
 import com.alkemy.bbva.polizaDeSeguros.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ClienteController {
 
     @Autowired

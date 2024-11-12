@@ -31,6 +31,8 @@ public class AuthService {
             Usuario usuario = usuarioService.getByUsername(username);
             response.put("id", usuario.getId());
             response.put("token", jwtService.generateToken(usuario.getId(), username, usuario.getRoles()));
+            response.put("nombre", usuario.getNombre());
+            response.put("apellido", usuario.getApellido());
         } catch (Exception e) {
             throw new AlkemyException(HttpStatus.UNAUTHORIZED, "Credenciales invalidas....");
         }

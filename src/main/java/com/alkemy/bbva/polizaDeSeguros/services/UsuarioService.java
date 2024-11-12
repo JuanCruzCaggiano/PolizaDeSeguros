@@ -20,7 +20,6 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     public Usuario getByUsername(final String username) {
         return usuarioRepository.findByUsername(username);
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -48,7 +49,7 @@ public class Cliente {
     @Past(message = "La fecha de nacimiento debe ser anterior a la actual")
     @Column(name="fecha-nacimiento")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Email(message = "El mail debe tener formato valido")
     private String email;
@@ -57,7 +58,7 @@ public class Cliente {
     private EstadoCliente estado;
 
     public Cliente(String nombre, String apellido, String direccion, String telefono,
-                   String tipoDocumento, String nroDocumento, Date fechaNacimiento, String email,
+                   String tipoDocumento, String nroDocumento, LocalDate fechaNacimiento, String email,
                    EstadoCliente estado) {
         this.nombre = nombre;
         this.apellido = apellido;

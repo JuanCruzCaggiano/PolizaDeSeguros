@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 @Configuration
 public class DataInitializer {
@@ -30,25 +31,27 @@ public class DataInitializer {
 
             // Clientes predefinidos
             if (clienteRepository.count() == 0) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 clienteRepository.save(new Cliente("Juan", "Pérez",
                         "Liniers", "123456789", "DNI",
-                        "40399768", sdf.parse("1990-01-01"),
+                        "40399768", LocalDate.parse("1990-01-01"),
                         "juancruz.caggiano@bbva.com", EstadoCliente.ACTIVO));
                 clienteRepository.save(new Cliente("María", "López",
                         "Burzaco", "134563", "DNI",
-                        "41253253", sdf.parse("1990-02-01"),
+                        "41253253", LocalDate.parse("1990-02-01"),
                         "juancruz.caggiano@bbva.com", EstadoCliente.ACTIVO));
                 clienteRepository.save(new Cliente("Carlos", "García",
                         "Mataderos", "678943", "DNI",
-                        "42876549", sdf.parse("1990-03-01"),
+                        "42876549", LocalDate.parse("1990-03-01"),
                         "juancruz.caggiano@bbva.com", EstadoCliente.ACTIVO));
             }
+
 
             // Usuarios predefinidos
             if (usuarioRepository.count() == 0) {
                 usuarioRepository.save(
                         new Usuario(
+                                "Juan Cruz",
+                                "Caggiano",
                                 "juancruz.caggiano@bbva.com",
                                 "$2a$10$UGaZsxous81YRRP3aDIyQu1P/lrVd0nKxxqIcz9LQAxHalz3V9eWa",
                                 Boolean.TRUE,

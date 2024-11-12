@@ -1,6 +1,9 @@
 package com.alkemy.bbva.polizaDeSeguros.services;
 
+import com.alkemy.bbva.polizaDeSeguros.controllers.TipoSeguroService;
+import com.alkemy.bbva.polizaDeSeguros.dtos.ClienteDTO;
 import com.alkemy.bbva.polizaDeSeguros.dtos.PolizaDTO;
+import com.alkemy.bbva.polizaDeSeguros.dtos.TipoSeguroDTO;
 import com.alkemy.bbva.polizaDeSeguros.enums.EstadoPoliza;
 import com.alkemy.bbva.polizaDeSeguros.models.Cliente;
 import com.alkemy.bbva.polizaDeSeguros.models.Poliza;
@@ -17,7 +20,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +33,12 @@ public class PolizaService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
+    private TipoSeguroService tipoSeguroService;
 
     @Autowired
     private TipoSeguroRepository tipoSeguroRepository;
@@ -80,6 +89,13 @@ public class PolizaService {
     @CacheEvict(value = "polizas", allEntries = true)
     public PolizaDTO actualizarPoliza(Long id, PolizaDTO polizaActualizada) {
         logger.info("Actualizando póliza...");
+
+        ClienteDTO clienteDePoliza = clienteService.buscarClientePorId(polizaActualizada.getIdCliente())
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado."));
+
+        TipoSeguroDTO tipoSeguroDePoliza = tipoSeguroService.buscarTipoSeguroPorId(polizaActualizada.getIdTipoSeguro())
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de seguro no encontrado."));
+
         return polizaRepository.findById(id)
                 .map(poliza -> {
                     poliza.setCodigo(polizaActualizada.getCodigo());
@@ -87,6 +103,10 @@ public class PolizaService {
                     poliza.setFechaVencimiento(polizaActualizada.getFechaVencimiento());
                     poliza.setEstado(polizaActualizada.getEstado());
                     poliza.setDescripcion(polizaActualizada.getDescripcion());
+                    poliza.setCliente(clienteDePoliza.toEntity()); // Asegúrate de tener un método `toEntity()` en el DTO si es necesario
+                    poliza.setTipoSeguro(tipoSeguroDePoliza.toEntity()); // Igual para el tipo de seguro
+
+                    // Guardar la póliza actualizada
                     Poliza polizaGuardada = polizaRepository.save(poliza);
 
                     // Convertir Poliza a PolizaDTO
@@ -114,7 +134,7 @@ public class PolizaService {
         emailService.sendEmail(
                 poliza.getCliente().getEmail(),
                 "Póliza eliminada correctamente",
-                "Estimado cliente, su póliza ha sido eliminada exitosamente. Con id " + id
+                "Estimado cliente, su póliza ha sido eliminada exitosamente. Con código " + poliza.getCodigo()
         );
 
         polizaRepository.delete(poliza);
@@ -136,16 +156,16 @@ public class PolizaService {
         Poliza poliza = polizaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Póliza no encontrada"));
 
-        Date fechaActual = new Date();
+        LocalDate fechaActual = LocalDate.now();
 
-        if (poliza.getFechaVencimiento().before(fechaActual) && poliza.getEstado() == EstadoPoliza.VIGENTE) {
+        if (poliza.getFechaVencimiento().isBefore(fechaActual) && poliza.getEstado() == EstadoPoliza.VIGENTE) {
             poliza.setEstado(EstadoPoliza.VENCIDA);
             polizaRepository.save(poliza);
 
             emailService.sendEmail(
                     poliza.getCliente().getEmail(),
                     "Póliza actualizada correctamente",
-                    "Estimado cliente, su póliza ha vencido y se encuentra actualizada. Con id " + id
+                    "Estimado cliente, su póliza ha vencido y se encuentra actualizada. Con código " + poliza.getCodigo()
             );
 
             logger.info("Póliza actualizada con éxito");

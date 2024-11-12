@@ -19,4 +19,13 @@ public class TipoSeguroDTO {
                 .primaBase(tipoSeguro.getPrimaBase())
                 .build();
     }
+
+    // Método toEntity() para convertir el DTO a la entidad TipoSeguro
+    public TipoSeguro toEntity() {
+        TipoSeguro tipoSeguro = new TipoSeguro();
+        tipoSeguro.setIdTipoSeguro(this.id);
+        tipoSeguro.setDescripcion(this.descripcion);
+        tipoSeguro.setPrimaBase(this.primaBase);
+        return tipoSeguro;
+    }
 }

@@ -1,11 +1,10 @@
 package com.alkemy.bbva.polizaDeSeguros.dtos;
 
 import com.alkemy.bbva.polizaDeSeguros.enums.EstadoPoliza;
-import com.alkemy.bbva.polizaDeSeguros.models.Cliente;
 import com.alkemy.bbva.polizaDeSeguros.models.Poliza;
-import com.alkemy.bbva.polizaDeSeguros.models.TipoSeguro;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -13,11 +12,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class PolizaDTO {
+    private Long id;
     private Long codigo;
     private String descripcion;
     private double montoAsegurado;
-    private Date fechaEmision;
-    private Date fechaVencimiento;
+    private LocalDate fechaEmision;
+    private LocalDate fechaVencimiento;
     private EstadoPoliza estado;
     private Long idTipoSeguro;
     private Long idCliente;
@@ -32,6 +32,7 @@ public class PolizaDTO {
 
     public PolizaDTO mapFromPoliza(final Poliza poliza) {
         return PolizaDTO.builder()
+                .id(poliza.getIdPoliza())
                 .codigo(poliza.getCodigo())
                 .descripcion(poliza.getDescripcion())
                 .montoAsegurado(poliza.getMontoAsegurado())

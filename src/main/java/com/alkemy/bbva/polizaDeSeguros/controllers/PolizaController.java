@@ -37,7 +37,7 @@ public class PolizaController {
         emailService.sendEmail(
                 clienteDePoliza.getEmail(),
                 "Nueva Póliza Creada",
-                "Estimado cliente, su póliza ha sido creada exitosamente. Con id " + polizaCreada.getCodigo()
+                "Estimado cliente, su póliza ha sido creada exitosamente. Con código " + polizaCreada.getCodigo()
         );
         return new ResponseEntity<>(polizaCreada, HttpStatus.CREATED);
     }
@@ -64,7 +64,7 @@ public class PolizaController {
         emailService.sendEmail(
                 clienteDePoliza.getEmail(),
                 "Póliza actualizada correctamente",
-                "Estimado cliente, su póliza ha sido actualizada exitosamente. Con id " + polizaActualizada.getCodigo()
+                "Estimado cliente, su póliza ha sido actualizada exitosamente. Con código " + polizaActualizada.getCodigo()
         );
 
         return ResponseEntity.ok(polizaActualizada);
@@ -93,7 +93,7 @@ public class PolizaController {
         if (actualizado) {
             return new ResponseEntity<>("La póliza ha sido actualizada ya que ha vencido.", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("La póliza ya se ha vencido o no se encontró.", HttpStatus.OK);
+            return new ResponseEntity<>("La póliza aun no ha vencido", HttpStatus.OK);
         }
     }
 

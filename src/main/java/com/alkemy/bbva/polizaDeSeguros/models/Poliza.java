@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -36,19 +38,18 @@ public class Poliza {
             "   tener al menos 3 caracteres y no superar los 100")
     private String descripcion;
 
-    @Min(value=1000, message = "El importe de monto asegurado debe ser mayor que cero")
+    @Min(value=0, message = "El importe de monto asegurado debe ser mayor que cero")
     @Column(name="monto-asegurado")
     private double montoAsegurado;
 
-    @Past(message = "La fecha de emision debe ser anterior a la actual")
+    @Past(message = "La fecha de emisión debe ser anterior a la actual")
     @Column(name="fecha-emision")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaEmision;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate fechaEmision;
 
-    @Past(message = "La fecha de vencimiento debe ser anterior a la actual")
     @Column(name="fecha-vencimiento")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaVencimiento;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate fechaVencimiento;
 
     @Enumerated(EnumType.STRING)
     private EstadoPoliza estado;
