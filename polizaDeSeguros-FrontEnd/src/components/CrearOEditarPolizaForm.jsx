@@ -112,7 +112,7 @@ const CreateOrEditPoliza = () => {
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
       setLoading(false);
-      return; // Si no hay token, detén el proceso
+      return;
     }
 
     const polizaData = {
