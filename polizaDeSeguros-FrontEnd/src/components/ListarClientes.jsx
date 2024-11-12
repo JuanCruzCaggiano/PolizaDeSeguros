@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Container, Typography, AppBar, Toolbar, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, CircularProgress, Backdrop, TextField } from '@mui/material';
+import { Container, Typography, AppBar, Toolbar, IconButton, Box } from '@mui/material';
 import api from '../services/api';
 import AuthService from '../services/AuthService';
 
@@ -40,14 +40,37 @@ const ClientesList = () => {
       }
     },  
     { field: 'nroDocumento', headerName: 'Nro. de Documento', width: 200 },
-    { field: 'fechaNacimiento', headerName: 'Fecha de Nacimiento', width: 200 },
+    { field: 'fechaNacimiento', headerName: 'Fecha de Nacimiento', width: 200,
+      renderCell: (params) => {
+        const fecha = params.value;
+        const partesFecha = fecha.split('-');
+        return `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`;
+      } 
+     },
     { field: 'telefono', headerName: 'Teléfono', width: 150 },
     { field: 'email', headerName: 'Email', width: 250 },
     { field: 'direccion', headerName: 'Dirección', width: 150 },
     { field: 'estado', headerName: 'Estado', width: 150 },
   ];
 
+  // Traducciones personalizadas para DataGrid
+  const localeText = {
+    noRowsLabel: 'No hay datos para mostrar',
+    columnMenuUnsort: 'Quitar orden',
+    columnMenuSortAsc: 'Ordenar ascendente',
+    columnMenuSortDesc: 'Ordenar descendente',
+    columnMenuFilter: 'Filtrar',
+    columnMenuHideColumn: 'Ocultar columna',
+    columnMenuShowColumns: 'Mostrar columnas',
+    rowsPerPage: 'Filas por página',
+    footerRowSelected: (count) => count !== 1 ? `${count.toLocaleString()} filas seleccionadas` : `${count.toLocaleString()} fila seleccionada`,
+    MuiTablePagination: {
+      labelRowsPerPage: 'Filas por página',
+    },
+  };
+
   return (
+    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh"}}>
     <Box>
       <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
         <Toolbar>
@@ -73,12 +96,20 @@ const ClientesList = () => {
             rows={clientes}
             columns={columns}
             pageSize={5}
+            sx={{
+              backgroundColor: "#ffffff",
+              "& .MuiDataGrid-columnHeaderTitle": {
+                fontWeight: "bold",
+              },
+            }}
             rowsPerPageOptions={[5, 10, 20]}
             disableSelectionOnClick
+            localeText={localeText}
           />
         </div>
     </Container>
     </Box>
+    </div>
   );
 };
 
