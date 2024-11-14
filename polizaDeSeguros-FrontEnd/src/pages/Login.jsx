@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box, AppBar, Toolbar } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  AppBar,
+  Toolbar,
+} from "@mui/material";
 import api from "../services/api";
 import AuthService from "../services/AuthService";
 
@@ -25,7 +33,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh"}}>
+    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh" }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit">

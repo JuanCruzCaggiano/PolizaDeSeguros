@@ -1,5 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {AppBar,Toolbar,Typography,TextField,Button,Container,Box,MenuItem,Select,InputLabel,FormControl,Snackbar,Alert,CircularProgress,Backdrop,IconButton} from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  TextField,
+  Button,
+  Container,
+  Box,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Snackbar,
+  Alert,
+  CircularProgress,
+  Backdrop,
+  IconButton,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import api from "../services/api";
@@ -175,7 +192,7 @@ const CreateOrEditPoliza = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh"}}>
+    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh" }}>
       <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
@@ -197,7 +214,7 @@ const CreateOrEditPoliza = () => {
       </AppBar>
 
       <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Box
+        <Box
           sx={{
             backgroundColor: "#ffffff",
             padding: 3,
@@ -205,137 +222,137 @@ const CreateOrEditPoliza = () => {
             boxShadow: 3,
           }}
         >
-        <Typography variant="h4" gutterBottom>
-          {id ? "Editar Póliza" : "Crear Póliza"}
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-        >
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
-              <NumericFormat
-                label="Código de Póliza"
-                value={codigo}
-                onValueChange={(values) => setCodigo(values.value)}
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                fullWidth
-                required
-                InputProps={{ readOnly: !!id, disabled: !!id }}
-              />
+          <Typography variant="h4" gutterBottom>
+            {id ? "Editar Póliza" : "Crear Póliza"}
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+          >
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              <Box sx={{ flex: 1 }}>
+                <NumericFormat
+                  label="Código de Póliza"
+                  value={codigo}
+                  onValueChange={(values) => setCodigo(values.value)}
+                  decimalScale={0}
+                  allowNegative={false}
+                  customInput={TextField}
+                  fullWidth
+                  required
+                  InputProps={{ readOnly: !!id, disabled: !!id }}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  label="Descripción"
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  fullWidth
+                  required
+                />
+              </Box>
             </Box>
-            <Box sx={{ flex: 1 }}>
-              <TextField
-                label="Descripción"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                fullWidth
-                required
-              />
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              <Box sx={{ flex: 1 }}>
+                <NumericFormat
+                  label="Monto Asegurado"
+                  value={montoAsegurado}
+                  onValueChange={(values) => setMontoAsegurado(values.value)}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale
+                  allowNegative={false}
+                  customInput={TextField}
+                  fullWidth
+                  required
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  label="Fecha de Emisión"
+                  type="date"
+                  value={fechaEmision}
+                  onChange={(e) => setFechaEmision(e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </Box>
+            </Box>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  label="Fecha de Vencimiento"
+                  type="date"
+                  value={fechaVencimiento}
+                  onChange={(e) => setFechaVencimiento(e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <FormControl fullWidth required>
+                  <InputLabel>Estado</InputLabel>
+                  <Select
+                    label="Estado"
+                    value={estado}
+                    onChange={(e) => setEstado(e.target.value)}
+                  >
+                    <MenuItem value="VIGENTE">VIGENTE</MenuItem>
+                    <MenuItem value="CANCELADA">CANCELADA</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              <Box sx={{ flex: 1 }}>
+                <FormControl fullWidth required>
+                  <InputLabel>Tipo de Seguro</InputLabel>
+                  <Select
+                    label="Tipo de Seguro"
+                    value={idTipoSeguro}
+                    onChange={(e) => setIdTipoSeguro(e.target.value)}
+                  >
+                    {tiposSeguro.map((tipo) => (
+                      <MenuItem key={tipo.id} value={tipo.id}>
+                        {tipo.descripcion}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <FormControl fullWidth required>
+                  <InputLabel>Cliente</InputLabel>
+                  <Select
+                    label="Cliente"
+                    value={idCliente}
+                    onChange={(e) => setIdCliente(e.target.value)}
+                  >
+                    {clientes.map((cliente) => (
+                      <MenuItem key={cliente.id} value={cliente.id}>
+                        {cliente.nombre} {cliente.apellido}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                sx={{ width: "100%" }}
+              >
+                {id ? "Actualizar Póliza" : "Crear Póliza"}
+              </Button>
             </Box>
           </Box>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
-              <NumericFormat
-                label="Monto Asegurado"
-                value={montoAsegurado}
-                onValueChange={(values) => setMontoAsegurado(values.value)}
-                thousandSeparator="."
-                decimalSeparator=","
-                decimalScale={2}
-                fixedDecimalScale
-                allowNegative={false}
-                customInput={TextField}
-                fullWidth
-                required
-              />
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <TextField
-                label="Fecha de Emisión"
-                type="date"
-                value={fechaEmision}
-                onChange={(e) => setFechaEmision(e.target.value)}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
-              <TextField
-                label="Fecha de Vencimiento"
-                type="date"
-                value={fechaVencimiento}
-                onChange={(e) => setFechaVencimiento(e.target.value)}
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <FormControl fullWidth required>
-                <InputLabel>Estado</InputLabel>
-                <Select
-                  label="Estado"
-                  value={estado}
-                  onChange={(e) => setEstado(e.target.value)}
-                >
-                  <MenuItem value="VIGENTE">VIGENTE</MenuItem>
-                  <MenuItem value="CANCELADA">CANCELADA</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
-              <FormControl fullWidth required>
-                <InputLabel>Tipo de Seguro</InputLabel>
-                <Select
-                  label="Tipo de Seguro"
-                  value={idTipoSeguro}
-                  onChange={(e) => setIdTipoSeguro(e.target.value)}
-                >
-                  {tiposSeguro.map((tipo) => (
-                    <MenuItem key={tipo.id} value={tipo.id}>
-                      {tipo.descripcion}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <FormControl fullWidth required>
-                <InputLabel>Cliente</InputLabel>
-                <Select
-                  label="Cliente"
-                  value={idCliente}
-                  onChange={(e) => setIdCliente(e.target.value)}
-                >
-                  {clientes.map((cliente) => (
-                    <MenuItem key={cliente.id} value={cliente.id}>
-                      {cliente.nombre} {cliente.apellido}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              variant="contained"
-              color="secondary"
-              type="submit"
-              sx={{ width: "100%" }}
-            >
-              {id ? "Actualizar Póliza" : "Crear Póliza"}
-            </Button>
-          </Box>
-        </Box>
         </Box>
       </Container>
 
@@ -359,7 +376,7 @@ const CreateOrEditPoliza = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      </div>
+    </div>
   );
 };
 

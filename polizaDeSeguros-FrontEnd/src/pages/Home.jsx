@@ -18,7 +18,7 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh"}}>
+    <div style={{ backgroundColor: "#dcdcdc", minHeight: "97vh" }}>
       <Navbar username={username} />
       <Container>
         <Box textAlign="center" mt={4}>
